@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pörssisähkön Hinta Huomenna</title>
-    <meta name="description" content="Seuraa pörssisähkön hintaa reaaliajassa. Katso tämän päivän ja huomisen tuntihinnat, alimmat ja ylimmät piikit sekä lue vinkit sähkön säästämiseen.">
+    <meta name="description" content="Seuraa pörssisähkön hintaa reaaliajassa. Katso tämän päivän ja huomisen tuntihinnat, alimmat ja ylimmät piikit.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script src="app.js" defer></script>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="container nav-content">
-            <div class="logo">Pörssisähkön Hinta<span>Huomenna</span></div>
+            <div class="logo"> Sähkö<span>tänään</span></div>
             <div class="nav-note">Hinnat sisältävät ALV 25,5 %</div>
         </div>
     </nav>
@@ -28,7 +30,7 @@
             <header class="hero">
                 <div class="hero-text">
                     <h1>Pörssisähkön Hinta Huomenna ja Tänään</h1>
-                    <p>Seuraa reaaliaikaisia hintoja ja suunnittele sähkönkäyttösi fiksusti. Lähde: sahkonhintatanaan.fi</p>
+                    <p>Seuraa reaaliaikaisia hintoja ja suunnittele sähkönkäyttösi fiksusti.</p>
                 </div>
                 <div class="tab-controls">
                     <button class="tab-btn active" id="btn-today" onclick="switchTab('today')">Tänään</button>
@@ -36,9 +38,15 @@
                 </div>
             </header>
 
-            <div id="loader" class="state-message">Haetaan markkinatietoja...</div>
+            <div id="loader" class="state-message">Yhdistetään sähköpörssiin...</div>
+            
+            <div id="error-today" class="state-message hidden">
+                <strong>Tämän päivän hintatietoja ei voitu ladata.</strong><br>
+                <span style="font-size: 14px; font-weight: 400;">Tarkista nettiyhteys tai kokeile sivun päivittämistä. (API voi olla tilapäisesti ruuhkautunut).</span>
+            </div>
+
             <div id="error-tomorrow" class="state-message hidden">
-                Huomisen hintoja ei ole vielä julkaistu.<br>
+                <strong>Huomisen hintoja ei ole vielä julkaistu.</strong><br>
                 <span style="font-size: 14px; font-weight: 400;">Pohjoismainen sähköpörssi julkaisee seuraavan päivän hinnat yleensä klo 14:15 mennessä.</span>
             </div>
 
@@ -79,46 +87,29 @@
 
         <section class="seo-section">
             <h2>Miten pörssisähkö toimii?</h2>
-            <p>Sähkön spot-hinta määräytyy yhteispohjoismaisessa Nord Pool -sähköpörssissä. Hinta elää jatkuvasti kysynnän ja tarjonnan lakien mukaisesti. Kun sähköä tuotetaan paljon – esimerkiksi tuulisina päivinä – ja kulutus on vähäistä, hinta laskee merkittävästi. Toisaalta kylminä pakkaspäivinä tai aamu- ja iltapiikkien aikaan, kun ihmiset heräävät tai palaavat töistä, sähkön kulutus ja samalla sen hinta nousevat.</p>
-            <p>Tietämällä milloin sähkö on halvinta, voit tehdä suuria säästöjä. Tarkan ja ajantasaisen <a href="https://sahkotanaan.fi" target="_blank" rel="noopener">Pörssisähkön hinta</a> -tiedon seuraaminen on paras tapa oppia oman talouden kulutustottumuksista ja välttää täysin turhia kustannuksia.</p>
+            <p>Sähkön spot-hinta määräytyy yhteispohjoismaisessa Nord Pool -sähköpörssissä. Hinta elää jatkuvasti kysynnän ja tarjonnan lakien mukaisesti. Kun sähköä tuotetaan paljon ja kulutus on vähäistä, hinta laskee merkittävästi.</p>
+            <p>Tietämällä milloin sähkö on halvinta, voit tehdä suuria säästöjä. Tarkan ja ajantasaisen <a href="https://sahkotanaan.fi" target="_blank" rel="noopener">Pörssisähkön hinta</a> -tiedon seuraaminen on paras tapa oppia oman talouden kulutustottumuksista.</p>
         </section>
 
         <section class="seo-section">
             <h2>Tehokkaimmat vinkit sähkölaskun pienentämiseen</h2>
-            <p>Tuntihintaisen sähkösopimuksen suurin etu on se, että valta on sinulla. Ajoittamalla sähkösyöpöt toiminnot oikein, voit ohittaa markkinoiden kalleimmat piikkitunnit.</p>
+            <p>Ajoittamalla sähkösyöpöt toiminnot oikein, voit ohittaa markkinoiden kalleimmat piikkitunnit.</p>
             <ul class="info-list">
-                <li><strong>Ajoita lämmitys:</strong> Lämminvesivaraaja ja lattialämmitys kannattaa säätää menemään päälle yöaikaan, jolloin sähkö on yleensä halvimmillaan.</li>
-                <li><strong>Käytä kodinkoneita fiksusti:</strong> Pyykinpesukoneen, kuivausrummun ja astianpesukoneen käyttö on suositeltavaa siirtää pois kalleimmilta aamu- (klo 8–10) ja iltatunneilta (klo 17–20).</li>
-                <li><strong>Sähköauton lataus:</strong> Sähköauton lataaminen haukkaa paljon energiaa. Älylataussovellusten tai ajastimien avulla voit ladata auton automaattisesti yön halvimpina tunteina.</li>
+                <li><strong>Ajoita lämmitys:</strong> Lämminvesivaraaja ja lattialämmitys kannattaa säätää menemään päälle yöaikaan.</li>
+                <li><strong>Käytä kodinkoneita fiksusti:</strong> Pyykinpesukoneen käyttö on suositeltavaa siirtää pois kalleimmilta aamu- (klo 8–10) ja iltatunneilta (klo 17–20).</li>
+                <li><strong>Sähköauton lataus:</strong> Ajastimien avulla voit ladata auton automaattisesti yön halvimpina tunteina.</li>
             </ul>
         </section>
-
+        
         <section class="seo-section">
             <h2>Usein kysytyt kysymykset (FAQ)</h2>
-
             <div class="faq-item">
-                <h3>1. Milloin huomisen pörssisähkön hinnat julkaistaan?</h3>
-                <p>Seuraavan päivän (huomisen) tuntihinnat julkaistaan Nord Pool -sähköpörssissä tyypillisesti iltapäivällä noin kello 14.15 Suomen aikaa. Heti kun data on julki, se päivittyy automaattisesti tähän sovellukseen.</p>
+                <h3>1. Milloin huomisen hinnat julkaistaan?</h3>
+                <p>Seuraavan päivän tuntihinnat julkaistaan tyypillisesti iltapäivällä noin kello 14.15 Suomen aikaa. Heti kun data on julki, se päivittyy automaattisesti tähän sovellukseen.</p>
             </div>
-
             <div class="faq-item">
                 <h3>2. Sisältävätkö sivuilla näkyvät hinnat arvonlisäveron?</h3>
-                <p>Kyllä. Kaikki sovelluksessamme esitetyt hinnat sisältävät Suomen voimassa olevan 25,5 % arvonlisäveron. Muistathan kuitenkin, että sähkölaskusi lopullinen summa koostuu spot-hinnan lisäksi sähköyhtiösi perimästä marginaalista (esim. 0,4 c/kWh) sekä sähkön siirtomaksusta.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>3. Miksi sähkön hinta voi olla negatiivinen?</h3>
-                <p>Negatiivinen sähkön hinta syntyy tilanteessa, jossa sähkön tarjonta ylittää kysynnän huomattavasti. Tämä tapahtuu usein silloin, kun tuulivoimaa ja vesivoimaa tuotetaan todella paljon, mutta kulutus on pientä (esimerkiksi kesäöisin). Negatiivisten hintojen aikana maksat sähköstäsi käytännössä vain siirtomaksun ja verot.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>4. Mitkä ovat vuorokauden kalleimmat tunnit?</h3>
-                <p>Hinnat vaihtelevat päivittäin, mutta nyrkkisääntönä sähkö on kalleimmillaan arkiaamuisin kello 8.00–10.00 ja alkuilloista kello 17.00–20.00. Näinä aikoina teollisuus on käynnissä ja kotitalouksissa käytetään paljon kodinkoneita ja viihde-elektroniikkaa.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>5. Kenelle pörssisähkösopimus sopii parhaiten?</h3>
-                <p>Pörssisähkö sopii parhaiten kotitalouksille, joilla on mahdollisuus joustaa sähkönkäytössään. Jos asut sähkölämmitteisessä omakotitalossa ja voit ohjata lämmitystä tai sähköauton latausta halvoille tunneille, pörssisähkö on historiallisesti ollut edullisin vaihtoehto pitkällä aikavälillä.</p>
+                <p>Kyllä. Kaikki sovelluksessamme esitetyt hinnat sisältävät Suomen voimassa olevan 25,5 % arvonlisäveron.</p>
             </div>
         </section>
     </main>
@@ -128,6 +119,5 @@
             <p>&copy; 2026 Sähkötänään.fi - Kaikki oikeudet pidätetään.</p>
         </div>
     </footer>
-
 </body>
 </html>
