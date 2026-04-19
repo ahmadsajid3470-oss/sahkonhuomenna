@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pörssisähkön Hinta Huomenna</title>
+    <meta name="description" content="Seuraa pörssisähkön hintaa reaaliajassa. Katso tämän päivän ja huomisen tuntihinnat, alimmat ja ylimmät piikit sekä lue vinkit sähkön säästämiseen.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">Pörssisähkön Hinta<span>Huomenna</span></div>
+            <div class="nav-note">Hinnat sisältävät ALV 25,5 %</div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="app-section">
+            <header class="hero">
+                <div class="hero-text">
+                    <h1>Pörssisähkön Hinta Huomenna ja Tänään</h1>
+                    <p>Seuraa reaaliaikaisia hintoja ja suunnittele sähkönkäyttösi fiksusti. Lähde: sahkonhintatanaan.fi</p>
+                </div>
+                <div class="tab-controls">
+                    <button class="tab-btn active" id="btn-today" onclick="switchTab('today')">Tänään</button>
+                    <button class="tab-btn" id="btn-tomorrow" onclick="switchTab('tomorrow')">Huomenna</button>
+                </div>
+            </header>
+
+            <div id="loader" class="state-message">Haetaan markkinatietoja...</div>
+            <div id="error-tomorrow" class="state-message hidden">
+                Huomisen hintoja ei ole vielä julkaistu.<br>
+                <span style="font-size: 14px; font-weight: 400;">Pohjoismainen sähköpörssi julkaisee seuraavan päivän hinnat yleensä klo 14:15 mennessä.</span>
+            </div>
+
+            <div id="dashboard-content" class="hidden">
+                <div class="stats-grid">
+                    <div class="card highlight-card" id="card-now">
+                        <div class="card-label">Hinta Nyt (<span id="time-now">--:--</span>)</div>
+                        <div class="card-value highlight-text" id="val-now">--,-- <span class="unit">c/kWh</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-label">Päivän Keskiarvo</div>
+                        <div class="card-value" id="val-avg">--,-- <span class="unit">c/kWh</span></div>
+                    </div>
+                    <div class="card split-card">
+                        <div class="split-side">
+                            <div class="card-label">Alin</div>
+                            <div class="split-value text-success" id="val-min">--,--</div>
+                            <div class="split-time" id="time-min">--:--</div>
+                        </div>
+                        <div class="split-side text-right">
+                            <div class="card-label">Ylin</div>
+                            <div class="split-value text-danger" id="val-max">--,--</div>
+                            <div class="split-time" id="time-max">--:--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-section card">
+                    <div class="chart-header">
+                        <h2 class="card-label" id="chart-title" style="margin: 0; font-size: 14px;">Tuntihinnat</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="seo-section">
+            <h2>Miten pörssisähkö toimii?</h2>
+            <p>Sähkön spot-hinta määräytyy yhteispohjoismaisessa Nord Pool -sähköpörssissä. Hinta elää jatkuvasti kysynnän ja tarjonnan lakien mukaisesti. Kun sähköä tuotetaan paljon – esimerkiksi tuulisina päivinä – ja kulutus on vähäistä, hinta laskee merkittävästi. Toisaalta kylminä pakkaspäivinä tai aamu- ja iltapiikkien aikaan, kun ihmiset heräävät tai palaavat töistä, sähkön kulutus ja samalla sen hinta nousevat.</p>
+            <p>Tietämällä milloin sähkö on halvinta, voit tehdä suuria säästöjä. Tarkan ja ajantasaisen <a href="https://sahkotanaan.fi" target="_blank" rel="noopener">Pörssisähkön hinta</a> -tiedon seuraaminen on paras tapa oppia oman talouden kulutustottumuksista ja välttää täysin turhia kustannuksia.</p>
+        </section>
+
+        <section class="seo-section">
+            <h2>Tehokkaimmat vinkit sähkölaskun pienentämiseen</h2>
+            <p>Tuntihintaisen sähkösopimuksen suurin etu on se, että valta on sinulla. Ajoittamalla sähkösyöpöt toiminnot oikein, voit ohittaa markkinoiden kalleimmat piikkitunnit.</p>
+            <ul class="info-list">
+                <li><strong>Ajoita lämmitys:</strong> Lämminvesivaraaja ja lattialämmitys kannattaa säätää menemään päälle yöaikaan, jolloin sähkö on yleensä halvimmillaan.</li>
+                <li><strong>Käytä kodinkoneita fiksusti:</strong> Pyykinpesukoneen, kuivausrummun ja astianpesukoneen käyttö on suositeltavaa siirtää pois kalleimmilta aamu- (klo 8–10) ja iltatunneilta (klo 17–20).</li>
+                <li><strong>Sähköauton lataus:</strong> Sähköauton lataaminen haukkaa paljon energiaa. Älylataussovellusten tai ajastimien avulla voit ladata auton automaattisesti yön halvimpina tunteina.</li>
+            </ul>
+        </section>
+
+        <section class="seo-section">
+            <h2>Usein kysytyt kysymykset (FAQ)</h2>
+
+            <div class="faq-item">
+                <h3>1. Milloin huomisen pörssisähkön hinnat julkaistaan?</h3>
+                <p>Seuraavan päivän (huomisen) tuntihinnat julkaistaan Nord Pool -sähköpörssissä tyypillisesti iltapäivällä noin kello 14.15 Suomen aikaa. Heti kun data on julki, se päivittyy automaattisesti tähän sovellukseen.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>2. Sisältävätkö sivuilla näkyvät hinnat arvonlisäveron?</h3>
+                <p>Kyllä. Kaikki sovelluksessamme esitetyt hinnat sisältävät Suomen voimassa olevan 25,5 % arvonlisäveron. Muistathan kuitenkin, että sähkölaskusi lopullinen summa koostuu spot-hinnan lisäksi sähköyhtiösi perimästä marginaalista (esim. 0,4 c/kWh) sekä sähkön siirtomaksusta.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>3. Miksi sähkön hinta voi olla negatiivinen?</h3>
+                <p>Negatiivinen sähkön hinta syntyy tilanteessa, jossa sähkön tarjonta ylittää kysynnän huomattavasti. Tämä tapahtuu usein silloin, kun tuulivoimaa ja vesivoimaa tuotetaan todella paljon, mutta kulutus on pientä (esimerkiksi kesäöisin). Negatiivisten hintojen aikana maksat sähköstäsi käytännössä vain siirtomaksun ja verot.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>4. Mitkä ovat vuorokauden kalleimmat tunnit?</h3>
+                <p>Hinnat vaihtelevat päivittäin, mutta nyrkkisääntönä sähkö on kalleimmillaan arkiaamuisin kello 8.00–10.00 ja alkuilloista kello 17.00–20.00. Näinä aikoina teollisuus on käynnissä ja kotitalouksissa käytetään paljon kodinkoneita ja viihde-elektroniikkaa.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>5. Kenelle pörssisähkösopimus sopii parhaiten?</h3>
+                <p>Pörssisähkö sopii parhaiten kotitalouksille, joilla on mahdollisuus joustaa sähkönkäytössään. Jos asut sähkölämmitteisessä omakotitalossa ja voit ohjata lämmitystä tai sähköauton latausta halvoille tunneille, pörssisähkö on historiallisesti ollut edullisin vaihtoehto pitkällä aikavälillä.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Sähkötänään.fi - Kaikki oikeudet pidätetään.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
